@@ -15,12 +15,12 @@ const app = express();
 app.use(express.static(path.join(__dirname, "../frontEnd")));
 
 // Rotas para as páginas HTML
-app.use("/", loginRoutes);
-app.use("/", admRoutes);
-app.use("/", lojaRoutes);
-app.use("/", relatorioRoutes);
-app.use("/", taloesRoutes);
-app.use("/", transacaoRoutes);
+app.use("/login", loginRoutes);
+app.use("/restrict", admRoutes);
+app.use("/store", lojaRoutes);
+app.use("/reports", relatorioRoutes);
+app.use("/stalks", taloesRoutes);
+app.use("/transactions", transacaoRoutes);
 
 
 module.exports = app;

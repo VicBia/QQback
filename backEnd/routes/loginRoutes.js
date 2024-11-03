@@ -3,7 +3,7 @@ const path = require("path");
 const router = express.Router();
 
 // Rota para servir a página de login de usuários
-router.get("/login", (req, res) => {
+router.get("/", (req, res) => {
   res.sendFile(path.join(__dirname, "../../frontEnd/login.html"));
 });
 

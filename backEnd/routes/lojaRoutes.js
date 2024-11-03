@@ -3,8 +3,8 @@ const path = require("path");
 const router = express.Router();
 
 // Rota para servir a página de gestão de lojas
-router.get("/store", (req, res) => {
-  res.sendFile(path.join(__dirname, "../../frontEnd/pageEnvio.html"));
+router.get("/", (req, res) => {
+  res.sendFile(path.join(__dirname, "../../frontEnd/pageLojas.html"));
 });
 
 module.exports = router;
