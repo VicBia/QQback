@@ -3,14 +3,26 @@ const path = require("path");
 const router = express.Router();
 
 // Rota para servir a página de login de usuários
-router.get("/", (req, res) => {
+router.route("/")
+.get((req, res) => {
   res.sendFile(path.join(__dirname, "../../frontEnd/login.html"));
-});
+})
 
 // Rota para servir a página de cadastro de usuários
-router.get("/register", (req, res) => {
+router.route("/register")
+.get((req, res) => {
   res.sendFile(path.join(__dirname, "../../frontEnd/register.html"));
-});
+})
+.post(async (req, res) => {
+  const { nome, matricula, email, senha, perfil } = req.body;
+
+  try {
+      const novoUsuario = await inserirUsuario(nome, matricula, email, senha, perfil);
+      res.status(201).json({ message: 'Usuário cadastrado com sucesso!', usuario: novoUsuario });
+  } catch (erro) {
+      res.status(500).json({ message: 'Erro ao cadastrar usuário', error: erro.message });
+  }
+})
 
 // Rota para servir a página de observação do registro
 router.get("/register_obs", (req, res) => {
