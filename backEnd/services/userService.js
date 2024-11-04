@@ -2,14 +2,14 @@ const pool = require('../config/database');
 
 
 // Função para inserir um novo usuário
-async function inserirUsuario(nome, matricula, email, senha, perfil = 'usuario') {
+async function inserirUsuario(matricula, nome_usuario, email, senha, id_loja) {
     const query = `
-        INSERT INTO usuarios (nome, matricula, email, senha, perfil)
+        INSERT INTO usuario (matricula, nome_usuario, email, senha, id_loja)
         VALUES ($1, $2, $3, $4, $5)
         RETURNING *;
     `;
 
-    const valores = [nome, matricula, email, senha, perfil];
+    const valores = [matricula, nome_usuario, email, senha, id_loja];
 
     try {
         const resultado = await pool.query(query, valores);
