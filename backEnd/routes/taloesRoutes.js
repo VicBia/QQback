@@ -2,11 +2,33 @@ const express = require("express");
 const path = require("path");
 const router = express.Router();
 const { inserirEstoque } = require("../services/stockService");
+const { inserirSolicitacao } = require("../services/maintenceService");
 
 // Rota para servir a página de gestão de lojas
-router.get("/maintenance", (req, res) => {
-  res.sendFile(path.join(__dirname, "../../frontEnd/pageManutencao.html"));
-});
+router
+  .route("/maintenance")
+  .get((req, res) => {
+    res.sendFile(path.join(__dirname, "../../frontEnd/pageManutencao.html"));
+  })
+  .post(async (req, res) => {
+    const { id_loja, quantidade_taloes, status } = req.body;
+
+    try {
+      const novaSolicitacao = await inserirSolicitacao(
+        id_loja,
+        quantidade_taloes,
+        status
+      );
+      res.status(201).json({
+        message: "Solicitação cadastrado com sucesso!",
+        usuario: novaSolicitacao,
+      });
+    } catch (erro) {
+      res
+        .status(500)
+        .json({ message: "Erro ao cadastrar solicitacao", error: erro.message });
+    }
+  });
 
 // Rota para servir a página de gestão de estoque
 router

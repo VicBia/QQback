@@ -7,4 +7,9 @@ router.get("/reports", (req, res) => {
   res.sendFile(path.join(__dirname, "../../frontEnd/pageRelatorios.html"));
 });
 
+// Rota para servir a página de dashboard
+router.get("/dashboard", (req, res) => {
+  res.sendFile(path.join(__dirname, "../../frontEnd/pageDashboard.html"));
+});
+
 module.exports = router;

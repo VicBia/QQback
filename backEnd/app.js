@@ -2,9 +2,9 @@ const express = require("express");
 const path = require("path");
 
 // Arquivos de rota
-const loginRoutes = require("./routes/loginRoutes");
-const admRoutes = require("./routes/admRoutes");
-const lojaRoutes = require("./routes/lojaRoutes");
+const loginRoutes = require("./routes/userRoutes");
+const admRoutes = require("./routes/profileRoutes");
+const lojaRoutes = require("./routes/storeRoutes");
 const relatorioRoutes = require("./routes/relatorioRoutes");
 const taloesRoutes = require("./routes/taloesRoutes");
 const transacaoRoutes = require("./routes/transacaoRoutes");
@@ -22,6 +22,5 @@ app.use("/", lojaRoutes);
 app.use("/", relatorioRoutes);
 app.use("/", taloesRoutes);
 app.use("/", transacaoRoutes);
-
 
 module.exports = app;

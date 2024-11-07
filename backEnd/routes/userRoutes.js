@@ -53,4 +53,11 @@ router.get("/token_password", (req, res) => {
   res.sendFile(path.join(__dirname, "../../frontEnd/tokenPassword.html"));
 });
 
+
+// Rota para servir a página de gestão de usuários
+router.get("/users", (req, res) => {
+  res.sendFile(path.join(__dirname, "../../frontEnd/pageAdm.html"));
+});
+
+
 module.exports = router;

@@ -1,6 +1,6 @@
 const pool = require("../config/database");
 
-// Função para inserir uma nova loja
+// Função para inserir um novo estoque
 async function inserirEstoque(
   id_loja,
   quantidade_atual,
