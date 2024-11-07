@@ -11,8 +11,16 @@ const {
 // Rota para servir a página de gestão do perfis
 router
   .route("/profile")
-  .get((req, res) => {
-    res.sendFile(path.join(__dirname, "../../frontEnd/pagePerfis.html"));
+  .get(async (req, res) => {
+    try {
+      res.sendFile(path.join(__dirname, "../../frontEnd/pagePerfis.html"));
+      const perfis = await consultarPerfis();
+      res.status(200).json(perfis); // Retorna todos os perfis
+    } catch (erro) {
+      res
+        .status(500)
+        .json({ message: "Erro ao consultar perfis", error: erro.message });
+    }
   })
   .post(async (req, res) => {
     const { nome_perfil, descricao } = req.body;
@@ -37,42 +45,42 @@ router
     const { nome_perfil, descricao } = req.body;
 
     try {
-      const usuarioAtualizado = await editarPerfil(
+      const perfilAtualizado = await editarPerfil(
         id_perfil,
         nome_perfil,
         descricao
       );
-      if (usuarioAtualizado) {
+      if (perfilAtualizado) {
         res.status(200).json({
-          message: "Usuário atualizado com sucesso!",
-          usuario: usuarioAtualizado,
+          message: "Perfil atualizado com sucesso!",
+          usuario: perfilAtualizado,
         });
       } else {
-        res.status(404).json({ message: "Usuário não encontrado." });
+        res.status(404).json({ message: "Perfil não encontrado." });
       }
     } catch (erro) {
       res
         .status(500)
-        .json({ message: "Erro ao editar usuário", error: erro.message });
+        .json({ message: "Erro ao editar perfil", error: erro.message });
     }
   })
   .delete(async (req, res) => {
     const { id_perfil } = req.params;
 
     try {
-      const usuarioExcluido = await deletarPerfil(id_perfil);
-      if (usuarioExcluido) {
+      const PerfilExcluido = await deletarPerfil(id_perfil);
+      if (PerfilExcluido) {
         res.status(200).json({
-          message: "Usuário excluído com sucesso!",
-          usuario: usuarioExcluido,
+          message: "Perfil excluído com sucesso!",
+          usuario: PerfilExcluido,
         });
       } else {
-        res.status(404).json({ message: "Usuário não encontrado." });
+        res.status(404).json({ message: "Perfil não encontrado." });
       }
     } catch (erro) {
       res
         .status(500)
-        .json({ message: "Erro ao excluir usuário", error: erro.message });
+        .json({ message: "Erro ao excluir perfil", error: erro.message });
     }
   });
 

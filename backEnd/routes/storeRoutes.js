@@ -8,20 +8,28 @@ const {
   deletarLoja,
 } = require("../services/storeService");
 
-// Rota para servir a página de gestão de lojas
+// Rota para servir a página de gestão de lojas e consultar todas as lojas
 router
   .route("/store")
-  .get((req, res) => {
-    res.sendFile(path.join(__dirname, "../../frontEnd/pageLoja.html"));
+  .get(async (req, res) => {
+    try {
+      res.sendFile(path.join(__dirname, "../../frontEnd/pageLoja.html")); // Envia a página HTML
+      const lojas = await consultarLojas();
+      res.status(200).json(lojas); // Retorna todas as lojas
+    } catch (erro) {
+      res
+        .status(500)
+        .json({ message: "Erro ao consultar lojas", error: erro.message });
+    }
   })
   .post(async (req, res) => {
-    const { numero_loja, name } = req.body;
+    const { numero_loja, nome_loja } = req.body;
 
     try {
-      const novaLoja = await inserirLoja(numero_loja, name);
+      const novaLoja = await inserirLoja(numero_loja, nome_loja);
       res.status(201).json({
         message: "Loja cadastrada com sucesso!",
-        usuario: novaLoja,
+        loja: novaLoja,
       });
     } catch (erro) {
       res
@@ -30,6 +38,7 @@ router
     }
   });
 
+// Rota para editar e deletar uma loja pelo ID
 router
   .route("/store/:id_loja")
   .put(async (req, res) => {
@@ -37,38 +46,38 @@ router
     const { numero_loja, nome_loja } = req.body;
 
     try {
-      const usuarioAtualizado = await editarLoja(id_loja, numero_loja, nome_loja);
-      if (usuarioAtualizado) {
+      const lojaAtualizada = await editarLoja(id_loja, numero_loja, nome_loja);
+      if (lojaAtualizada) {
         res.status(200).json({
-          message: "Usuário atualizado com sucesso!",
-          usuario: usuarioAtualizado,
+          message: "Loja atualizada com sucesso!",
+          loja: lojaAtualizada,
         });
       } else {
-        res.status(404).json({ message: "Usuário não encontrado." });
+        res.status(404).json({ message: "Loja não encontrada." });
       }
     } catch (erro) {
       res
         .status(500)
-        .json({ message: "Erro ao editar usuário", error: erro.message });
+        .json({ message: "Erro ao editar loja", error: erro.message });
     }
   })
   .delete(async (req, res) => {
     const { id_loja } = req.params;
 
     try {
-      const usuarioExcluido = await deletarLoja(id_loja);
-      if (usuarioExcluido) {
+      const lojaExcluida = await deletarLoja(id_loja);
+      if (lojaExcluida) {
         res.status(200).json({
-          message: "Usuário excluído com sucesso!",
-          usuario: usuarioExcluido,
+          message: "Loja excluída com sucesso!",
+          loja: lojaExcluida,
         });
       } else {
-        res.status(404).json({ message: "Usuário não encontrado." });
+        res.status(404).json({ message: "Loja não encontrada." });
       }
     } catch (erro) {
       res
         .status(500)
-        .json({ message: "Erro ao excluir usuário", error: erro.message });
+        .json({ message: "Erro ao excluir loja", error: erro.message });
     }
   });
 
