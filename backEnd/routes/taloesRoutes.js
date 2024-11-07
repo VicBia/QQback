@@ -49,7 +49,7 @@ router
     }
   });
 
-// Rota para editar e deletar um estoque pelo ID
+// Rota para editar e deletar um talão pelo ID
 router
   .route("/maintenance/:id_talao")
   .put(async (req, res) => {

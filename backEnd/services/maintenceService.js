@@ -1,6 +1,6 @@
 const pool = require("../config/database");
 
-// Função para inserir um novo estoque
+// Função para inserir um novo talão
 async function inserirSolicitacao(id_loja, quantidade_taloes, status) {
   const query = `
         INSERT INTO taloes (id_loja, quantidade_taloes, status)
@@ -19,7 +19,7 @@ async function inserirSolicitacao(id_loja, quantidade_taloes, status) {
   }
 }
 
-// Função para consultar todos os estoques
+// Função para consultar todos os talões
 async function consultarTaloes() {
   const query = `
         SELECT * FROM taloes;
@@ -34,7 +34,6 @@ async function consultarTaloes() {
   }
 }
 
-// Função para editar um estoque
 // Função para editar um talão
 async function editarTalao(
   id_talao,
@@ -61,7 +60,7 @@ async function editarTalao(
   }
 }
 
-// Função para excluir um estoque
+// Função para excluir um talão
 async function deletarTalao(id_talao) {
   const query = `
         DELETE FROM taloes
