@@ -7,13 +7,26 @@ const {
   editarEstoque,
   deletarEstoque,
 } = require("../services/stockService");
-const { inserirSolicitacao } = require("../services/maintenceService");
+const {
+  inserirSolicitacao,
+  consultarTaloes,
+  editarTalao,
+  deletarTalao,
+} = require("../services/maintenceService");
 
 // Rota para servir a página de gestão de lojas
 router
   .route("/maintenance")
-  .get((req, res) => {
-    res.sendFile(path.join(__dirname, "../../frontEnd/pageManutencao.html"));
+  .get(async (req, res) => {
+    try {
+      res.sendFile(path.join(__dirname, "../../frontEnd/pageManutencao.html")); // Envia a página HTML
+      const taloes = await consultarTaloes();
+      res.status(200).json(taloes); // Retorna todas as solicitações de talões
+    } catch (erro) {
+      res
+        .status(500)
+        .json({ message: "Erro ao consultar talões", error: erro.message });
+    }
   })
   .post(async (req, res) => {
     const { id_loja, quantidade_taloes, status } = req.body;
@@ -33,6 +46,55 @@ router
         message: "Erro ao cadastrar solicitacao",
         error: erro.message,
       });
+    }
+  });
+
+// Rota para editar e deletar um estoque pelo ID
+router
+  .route("/maintenance/:id_talao")
+  .put(async (req, res) => {
+    const { id_talao } = req.params;
+    const { quantidade_taloes, remessa, status, id_loja } = req.body;
+
+    try {
+      const talaoAtualizado = await editarTalao(
+        id_talao,
+        quantidade_taloes,
+        remessa,
+        status,
+        id_loja
+      );
+      if (talaoAtualizado) {
+        res.status(200).json({
+          message: "Talão atualizado com sucesso!",
+          talao: talaoAtualizado,
+        });
+      } else {
+        res.status(404).json({ message: "Talão não encontrado." });
+      }
+    } catch (erro) {
+      res
+        .status(500)
+        .json({ message: "Erro ao editar talão", error: erro.message });
+    }
+  })
+  .delete(async (req, res) => {
+    const { id_talao } = req.params;
+
+    try {
+      const talaoExcluido = await deletarTalao(id_talao);
+      if (talaoExcluido) {
+        res.status(200).json({
+          message: "Talão excluído com sucesso!",
+          talao: talaoExcluido,
+        });
+      } else {
+        res.status(404).json({ message: "Talão não encontrado." });
+      }
+    } catch (erro) {
+      res
+        .status(500)
+        .json({ message: "Erro ao excluir talão", error: erro.message });
     }
   });
 
