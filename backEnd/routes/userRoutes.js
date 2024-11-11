@@ -59,7 +59,7 @@ router
   .route("/api/register/:registration")
   .put(async (req, res) => {
     const { registration } = req.params;
-    const { user_name, email, password, id_store, registration_date } =
+    const { user_name, email, password, id_store } =
       req.body;
 
     try {

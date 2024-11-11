@@ -5,9 +5,10 @@ const {
   consultarEnvio,
   inserirEnvio,
   atualizarTalao,
+  deletarTalao,
 } = require("../services/transactionService");
 
-// Rota para servir a página de envio de talões
+// Rota para servir a página de transações
 router
   .route("/api/send")
   .get(async (req, res) => {
@@ -47,7 +48,6 @@ router
       res.status(201).json({
         message: "Envio cadastrado e talão atualizado com sucesso!",
         envio: novaSolicitacao,
-        talao: talaoAtualizado,
       });
     } catch (erro) {
       res.status(500).json({
@@ -120,7 +120,7 @@ router
 // Rota para servir a página de gestão de recebimento de talões
 router.get("/receive", async (req, res) => {
   try {
-    res.sendFile(path.join(__dirname, "../../frontEnd/pageRecebimento.html"));
+    // res.sendFile(path.join(__dirname, "../../frontEnd/pageRecebimento.html"));
     const taloes = await consultarRecebimento();
     res.status(200).json(taloes); // Retorna todas as solicitações de talões
   } catch (erro) {

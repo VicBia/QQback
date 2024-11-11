@@ -9,6 +9,7 @@ const relatorioRoutes = require("./routes/relatorioRoutes");
 const stockRoutes = require("./routes/stockRoutes");
 const talonsRoutes = require("./routes/talonsRoutes");
 const transacaoRoutes = require("./routes/transactionRoutes");
+const userprofileRoutes = require("./routes/userprofileRoutes");
 
 const app = express();
 app.use(express.json());
@@ -24,5 +25,6 @@ app.use("/", relatorioRoutes);
 app.use("/", stockRoutes);
 app.use("/", talonsRoutes);
 app.use("/", transacaoRoutes);
+app.use("/", userprofileRoutes);
 
 module.exports = app;

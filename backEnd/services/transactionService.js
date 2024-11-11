@@ -51,7 +51,7 @@ async function inserirEnvio(
   }
 }
 
-// Função para atualizar a tabela taloes com os campos de remessa e status
+// Função para atualizar a tabela transações
 async function atualizarTalao(
   id_transaction,
   shipment = null,
@@ -91,15 +91,15 @@ async function atualizarTalao(
 }
 
 // Função para excluir um envio
-async function deletarEnvio(id_talao) {
+async function deletarTalao(id_transaction) {
   const query = `
         DELETE FROM transaction
-        WHERE id_talao = $1
+        WHERE id_transaction = $1
         RETURNING *;
     `;
 
   try {
-    const resultado = await pool.query(query, [id_talao]);
+    const resultado = await pool.query(query, [id_transaction]);
     return resultado.rows[0]; // Retorna o talão excluído, ou undefined se não encontrado
   } catch (erro) {
     console.error("Erro ao excluir talão:", erro);
@@ -107,4 +107,4 @@ async function deletarEnvio(id_talao) {
   }
 }
 
-module.exports = { consultarEnvio, inserirEnvio, atualizarTalao };
+module.exports = { consultarEnvio, inserirEnvio, atualizarTalao, deletarTalao };

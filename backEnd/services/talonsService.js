@@ -69,6 +69,17 @@ async function editarTalao(
 
   try {
     const resultado = await pool.query(query, valores);
+
+    // Cacelar na tabela transaction
+    const associarTransactionQuery = `
+        INSERT INTO transaction (id_talon, status)
+        VALUES ($1, $2)
+    `;
+
+    const status = "canceled"; // Definir o status
+
+    await pool.query(associarTransactionQuery, [id_talon, status]);
+
     return resultado.rows[0]; // Retorna o talão atualizado
   } catch (erro) {
     console.error("Erro ao editar talão:", erro);
