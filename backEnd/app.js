@@ -6,8 +6,9 @@ const loginRoutes = require("./routes/userRoutes");
 const admRoutes = require("./routes/profileRoutes");
 const lojaRoutes = require("./routes/storeRoutes");
 const relatorioRoutes = require("./routes/relatorioRoutes");
-const taloesRoutes = require("./routes/taloesRoutes");
-const transacaoRoutes = require("./routes/transacaoRoutes");
+const stockRoutes = require("./routes/stockRoutes");
+const talonsRoutes = require("./routes/talonsRoutes");
+const transacaoRoutes = require("./routes/transactionRoutes");
 
 const app = express();
 app.use(express.json());
@@ -20,7 +21,8 @@ app.use("/", loginRoutes);
 app.use("/", admRoutes);
 app.use("/", lojaRoutes);
 app.use("/", relatorioRoutes);
-app.use("/", taloesRoutes);
+app.use("/", stockRoutes);
+app.use("/", talonsRoutes);
 app.use("/", transacaoRoutes);
 
 module.exports = app;

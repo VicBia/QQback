@@ -1,17 +1,48 @@
 const pool = require("../config/database");
 
 // Função para inserir um novo usuário
-async function inserirUsuario(matricula, nome_usuario, email, senha, id_loja) {
-  const query = `
-        INSERT INTO usuario (matricula, nome_usuario, email, senha, id_loja)
-        VALUES ($1, $2, $3, $4, $5)
-        RETURNING *;
-    `;
+async function inserirUsuario(
+  registration,
+  user_name,
+  email,
+  user_password,
+  id_store
+) {
+  // Captura a data e hora atual
+  const registration_date = new Date();
 
-  const valores = [matricula, nome_usuario, email, senha, id_loja];
+  const query = `
+      INSERT INTO users (registration, user_name, email, user_password, id_store, registration_date)
+    VALUES ($1, $2, $3, $4, $5, $6)
+    RETURNING *;
+`;
+
+  const valores = [
+    registration,
+    user_name,
+    email,
+    user_password,
+    id_store,
+    registration_date,
+  ];
 
   try {
     const resultado = await pool.query(query, valores);
+
+    // Inserindo também na tabela UserProfile
+    const associarPerfilQuery = `
+        INSERT INTO userprofile (registration, id_profile, association_date)
+        VALUES ($1, $2, $3)
+    `;
+    const perfil_id = 2; // Defina o ID do perfil que deseja associar, pode vir de outra lógica
+    const associacaoData = new Date(); // Data de associação
+
+    await pool.query(associarPerfilQuery, [
+      registration,
+      perfil_id,
+      associacaoData,
+    ]);
+
     return resultado.rows[0]; // Retorna o usuário inserido
   } catch (erro) {
     console.error("Erro ao inserir usuário:", erro);
@@ -19,31 +50,47 @@ async function inserirUsuario(matricula, nome_usuario, email, senha, id_loja) {
   }
 }
 
-// Função para consultar todos as lojas
+// Função para consultar todos os usuários
 async function consultarUsuarios() {
   const query = `
-        SELECT * FROM usuario;
+        SELECT * FROM users;
     `;
 
   try {
     const resultado = await pool.query(query);
-    return resultado.rows; // Retorna todas as lojas
+    return resultado.rows; // Retorna todos os usuários
   } catch (erro) {
-    console.error("Erro ao consultar os perfis:", erro);
+    console.error("Erro ao consultar os usuários:", erro);
     throw erro;
   }
 }
 
 // Função para editar um usuário
-async function editarUsuario(matricula, nome_usuario, email, senha, id_loja) {
+async function editarUsuario(
+  registration,
+  user_name,
+  email,
+  user_password,
+  id_store
+) {
+  // Atualiza a data de registro no momento da edição
+  const registration_date = new Date();
+
   const query = `
-          UPDATE usuario
-          SET nome_usuario = $2, email = $3, senha = $4, id_loja = $5
-          WHERE matricula = $1
+          UPDATE users
+          SET user_name = $2, email = $3, user_password = $4, id_store = $5, registration_date = $6
+          WHERE registration = $1
           RETURNING *;
       `;
 
-  const valores = [matricula, nome_usuario, email, senha, id_loja];
+  const valores = [
+    registration,
+    user_name,
+    email,
+    user_password,
+    id_store,
+    registration_date,
+  ];
 
   try {
     const resultado = await pool.query(query, valores);
@@ -55,15 +102,15 @@ async function editarUsuario(matricula, nome_usuario, email, senha, id_loja) {
 }
 
 // Função para excluir um usuário
-async function deletarUsuario(matricula) {
+async function deletarUsuario(registration) {
   const query = `
-          DELETE FROM usuario
-          WHERE matricula = $1
+          DELETE FROM users
+          WHERE registration = $1
           RETURNING *;
       `;
 
   try {
-    const resultado = await pool.query(query, [matricula]);
+    const resultado = await pool.query(query, [registration]);
     return resultado.rows[0]; // Retorna o usuário excluído, ou undefined se não encontrado
   } catch (erro) {
     console.error("Erro ao excluir usuário:", erro);
@@ -71,4 +118,9 @@ async function deletarUsuario(matricula) {
   }
 }
 
-module.exports = { consultarUsuarios, inserirUsuario, editarUsuario, deletarUsuario };
+module.exports = {
+  consultarUsuarios,
+  inserirUsuario,
+  editarUsuario,
+  deletarUsuario,
+};

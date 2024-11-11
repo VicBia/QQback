@@ -15,10 +15,10 @@ router.route("/login").get((req, res) => {
 
 // Rota para servir a página de cadastro de usuários
 router
-  .route("/register")
+  .route("/api/register")
   .get(async (req, res) => {
     try {
-      res.sendFile(path.join(__dirname, "../../frontEnd/register.html"));
+      // res.sendFile(path.join(__dirname, "../../frontEnd/register.html"));
       const usuarios = await consultarUsuarios();
       res.status(200).json(usuarios); // Retorna todos os usuários
     } catch (erro) {
@@ -28,15 +28,21 @@ router
     }
   })
   .post(async (req, res) => {
-    const { matricula, nome_usuario, email, senha, id_loja } = req.body;
+    const {
+      registration,
+      user_name,
+      email,
+      user_password,
+      id_store,
+    } = req.body;
 
     try {
       const novoUsuario = await inserirUsuario(
-        matricula,
-        nome_usuario,
+        registration,
+        user_name,
         email,
-        senha,
-        id_loja
+        user_password,
+        id_store
       );
       res.status(201).json({
         message: "Usuário cadastrado com sucesso!",
@@ -50,18 +56,19 @@ router
   });
 
 router
-  .route("/register/:matricula")
+  .route("/api/register/:registration")
   .put(async (req, res) => {
-    const { matricula } = req.params;
-    const { nome_usuario, email, senha, id_loja } = req.body;
+    const { registration } = req.params;
+    const { user_name, email, password, id_store, registration_date } =
+      req.body;
 
     try {
       const usuarioAtualizado = await editarUsuario(
-        matricula,
-        nome_usuario,
+        registration,
+        user_name,
         email,
-        senha,
-        id_loja
+        password,
+        id_store
       );
       if (usuarioAtualizado) {
         res.status(200).json({
@@ -78,10 +85,10 @@ router
     }
   })
   .delete(async (req, res) => {
-    const { matricula } = req.params;
+    const { registration } = req.params;
 
     try {
-      const usuarioExcluido = await deletarUsuario(matricula);
+      const usuarioExcluido = await deletarUsuario(registration);
       if (usuarioExcluido) {
         res.status(200).json({
           message: "Usuário excluído com sucesso!",
@@ -102,12 +109,12 @@ router.get("/register_obs", (req, res) => {
   res.sendFile(path.join(__dirname, "../../frontEnd/registerObs.html"));
 });
 
-// Rota para servir a página de esqueci a senha
+// Rota para servir a página de esqueci a password
 router.get("/forgot_password", (req, res) => {
   res.sendFile(path.join(__dirname, "../../frontEnd/forgotPassword.html"));
 });
 
-// Rota para servir a página de recuperar a senha
+// Rota para servir a página de recuperar a password
 router.get("/token_password", (req, res) => {
   res.sendFile(path.join(__dirname, "../../frontEnd/tokenPassword.html"));
 });

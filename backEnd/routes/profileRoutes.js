@@ -6,14 +6,14 @@ const {
   consultarPerfis,
   editarPerfil,
   deletarPerfil,
-} = require("../services/perfilService");
+} = require("../services/profileService");
 
 // Rota para servir a página de gestão do perfis
 router
-  .route("/profile")
+  .route("/api/profile")
   .get(async (req, res) => {
     try {
-      res.sendFile(path.join(__dirname, "../../frontEnd/pagePerfis.html"));
+      // res.sendFile(path.join(__dirname, "../../frontEnd/pagePerfis.html"));
       const perfis = await consultarPerfis();
       res.status(200).json(perfis); // Retorna todos os perfis
     } catch (erro) {
@@ -23,10 +23,10 @@ router
     }
   })
   .post(async (req, res) => {
-    const { nome_perfil, descricao } = req.body;
+    const { profile_name, description } = req.body;
 
     try {
-      const novoPerfil = await inserirPerfil(nome_perfil, descricao);
+      const novoPerfil = await inserirPerfil(profile_name, description);
       res.status(201).json({
         message: "Perfil cadastrado com sucesso!",
         usuario: novoPerfil,
@@ -39,16 +39,16 @@ router
   });
 
 router
-  .route("/profile/:id_perfil")
+  .route("/api/profile/:id_perfil")
   .put(async (req, res) => {
     const { id_perfil } = req.params;
-    const { nome_perfil, descricao } = req.body;
+    const { profile_name, description } = req.body;
 
     try {
       const perfilAtualizado = await editarPerfil(
         id_perfil,
-        nome_perfil,
-        descricao
+        profile_name,
+        description
       );
       if (perfilAtualizado) {
         res.status(200).json({

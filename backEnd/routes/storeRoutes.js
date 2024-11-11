@@ -10,10 +10,10 @@ const {
 
 // Rota para servir a página de gestão de lojas e consultar todas as lojas
 router
-  .route("/store")
+  .route("/api/store")
   .get(async (req, res) => {
     try {
-      res.sendFile(path.join(__dirname, "../../frontEnd/pageLoja.html")); // Envia a página HTML
+      // res.sendFile(path.join(__dirname, "../../frontEnd/pageLoja.html")); // Envia a página HTML
       const lojas = await consultarLojas();
       res.status(200).json(lojas); // Retorna todas as lojas
     } catch (erro) {
@@ -23,10 +23,10 @@ router
     }
   })
   .post(async (req, res) => {
-    const { numero_loja, nome_loja } = req.body;
+    const { store_number, store_name } = req.body;
 
     try {
-      const novaLoja = await inserirLoja(numero_loja, nome_loja);
+      const novaLoja = await inserirLoja(store_number, store_name);
       res.status(201).json({
         message: "Loja cadastrada com sucesso!",
         loja: novaLoja,
@@ -40,13 +40,17 @@ router
 
 // Rota para editar e deletar uma loja pelo ID
 router
-  .route("/store/:id_loja")
+  .route("/api/store/:id_store")
   .put(async (req, res) => {
-    const { id_loja } = req.params;
-    const { numero_loja, nome_loja } = req.body;
+    const { id_store } = req.params;
+    const { store_number, store_name } = req.body;
 
     try {
-      const lojaAtualizada = await editarLoja(id_loja, numero_loja, nome_loja);
+      const lojaAtualizada = await editarLoja(
+        id_store,
+        store_number,
+        store_name
+      );
       if (lojaAtualizada) {
         res.status(200).json({
           message: "Loja atualizada com sucesso!",
@@ -62,10 +66,10 @@ router
     }
   })
   .delete(async (req, res) => {
-    const { id_loja } = req.params;
+    const { id_store } = req.params;
 
     try {
-      const lojaExcluida = await deletarLoja(id_loja);
+      const lojaExcluida = await deletarLoja(id_store);
       if (lojaExcluida) {
         res.status(200).json({
           message: "Loja excluída com sucesso!",

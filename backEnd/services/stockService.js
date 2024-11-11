@@ -2,22 +2,22 @@ const pool = require("../config/database");
 
 // Função para inserir um novo estoque
 async function inserirEstoque(
-  id_loja,
-  quantidade_atual,
-  quantidade_recomendada,
-  quantidade_min
+  id_store,
+  current_quantity,
+  recommended_quantity,
+  minimum_quantity
 ) {
   const query = `
-        INSERT INTO estoque (id_loja, quantidade_atual, quantidade_recomendada, quantidade_min)
+        INSERT INTO stock (id_store, current_quantity, recommended_quantity, minimum_quantity)
         VALUES ($1, $2, $3, $4)
         RETURNING *;
     `;
 
   const valores = [
-    id_loja,
-    quantidade_atual,
-    quantidade_recomendada,
-    quantidade_min,
+    id_store,
+    current_quantity,
+    recommended_quantity,
+    minimum_quantity,
   ];
 
   try {
@@ -32,7 +32,7 @@ async function inserirEstoque(
 // Função para consultar todos os estoques
 async function consultarEstoques() {
   const query = `
-        SELECT * FROM estoque;
+        SELECT * FROM stock;
     `;
 
   try {
@@ -46,25 +46,25 @@ async function consultarEstoques() {
 
 // Função para editar um estoque
 async function editarEstoque(
-  id_estoque,
-  id_loja,
-  quantidade_atual,
-  quantidade_recomendada,
-  quantidade_min
+  id_stock,
+  id_store,
+  current_quantity,
+  recommended_quantity,
+  minimum_quantity
 ) {
   const query = `
-        UPDATE estoque
-        SET id_loja = $2, quantidade_atual = $3, quantidade_recomendada = $4, quantidade_min = $5
-        WHERE id_estoque = $1
+        UPDATE stock
+        SET id_store = $2, current_quantity = $3, recommended_quantity = $4, minimum_quantity = $5
+        WHERE id_stock = $1
         RETURNING *;
     `;
 
   const valores = [
-    id_estoque,
-    id_loja,
-    quantidade_atual,
-    quantidade_recomendada,
-    quantidade_min,
+    id_stock,
+    id_store,
+    current_quantity,
+    recommended_quantity,
+    minimum_quantity,
   ];
 
   try {
@@ -77,15 +77,15 @@ async function editarEstoque(
 }
 
 // Função para excluir um estoque
-async function deletarEstoque(id_estoque) {
+async function deletarEstoque(id_stock) {
   const query = `
-        DELETE FROM estoque
-        WHERE id_estoque = $1
+        DELETE FROM stock
+        WHERE id_stock = $1
         RETURNING *;
     `;
 
   try {
-    const resultado = await pool.query(query, [id_estoque]);
+    const resultado = await pool.query(query, [id_stock]);
     return resultado.rows[0]; // Retorna o estoque excluído, ou undefined se não encontrado
   } catch (erro) {
     console.error("Erro ao excluir estoque:", erro);

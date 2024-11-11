@@ -1,14 +1,14 @@
 const pool = require("../config/database");
 
 // Função para inserir uma nova loja
-async function inserirLoja(numero_loja, nome_loja) {
+async function inserirLoja(store_number, store_name) {
   const query = `
-        INSERT INTO loja (numero_loja, nome_loja)
+        INSERT INTO store (store_number, store_name)
         VALUES ($1, $2)
         RETURNING *;
     `;
 
-  const valores = [numero_loja, nome_loja];
+  const valores = [store_number, store_name];
 
   try {
     const resultado = await pool.query(query, valores);
@@ -22,7 +22,7 @@ async function inserirLoja(numero_loja, nome_loja) {
 // Função para consultar todos as lojas
 async function consultarLojas() {
   const query = `
-      SELECT * FROM loja;
+      SELECT * FROM store;
   `;
 
   try {
@@ -35,15 +35,15 @@ async function consultarLojas() {
 }
 
 // Função para editar uma loja
-async function editarLoja(id_loja, numero_loja, nome_loja) {
+async function editarLoja(id_store, store_number, store_name) {
   const query = `
-      UPDATE loja
-      SET numero_loja = $2, nome_loja = $3
-      WHERE id_loja = $1
+      UPDATE store
+      SET store_number = $2, store_name = $3
+      WHERE id_store = $1
       RETURNING *;
   `;
 
-  const valores = [id_loja, numero_loja, nome_loja];
+  const valores = [id_store, store_number, store_name];
 
   try {
     const resultado = await pool.query(query, valores);
@@ -55,15 +55,15 @@ async function editarLoja(id_loja, numero_loja, nome_loja) {
 }
 
 // Função para excluir uma loja
-async function deletarLoja(id_loja) {
+async function deletarLoja(id_store) {
   const query = `
-      DELETE FROM loja
-      WHERE id_loja = $1
+      DELETE FROM store
+      WHERE id_store = $1
       RETURNING *;
   `;
 
   try {
-    const resultado = await pool.query(query, [id_loja]);
+    const resultado = await pool.query(query, [id_store]);
     return resultado.rows[0]; // Retorna a loja excluída, ou undefined se não encontrado
   } catch (erro) {
     console.error("Erro ao deletar perfil:", erro);
