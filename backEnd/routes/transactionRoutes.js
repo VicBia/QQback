@@ -118,16 +118,16 @@ router
   });
 
 // Rota para servir a página de gestão de recebimento de talões
-router.get("/receive", async (req, res) => {
-  try {
-    // res.sendFile(path.join(__dirname, "../../frontEnd/pageRecebimento.html"));
-    const taloes = await consultarRecebimento();
-    res.status(200).json(taloes); // Retorna todas as solicitações de talões
-  } catch (erro) {
-    res
-      .status(500)
-      .json({ message: "Erro ao consultar talões", error: erro.message });
-  }
-});
+// router.get("/receive", async (req, res) => {
+//   try {
+//     // res.sendFile(path.join(__dirname, "../../frontEnd/pageRecebimento.html"));
+//     const taloes = await consultarRecebimento();
+//     res.status(200).json(taloes); // Retorna todas as solicitações de talões
+//   } catch (erro) {
+//     res
+//       .status(500)
+//       .json({ message: "Erro ao consultar talões", error: erro.message });
+//   }
+// });
 
 module.exports = router;

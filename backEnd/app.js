@@ -11,6 +11,8 @@ const talonsRoutes = require("./routes/talonsRoutes");
 const transacaoRoutes = require("./routes/transactionRoutes");
 const userprofileRoutes = require("./routes/userprofileRoutes");
 
+const viewRoutes = require("./routes/viewRoutes");
+
 const app = express();
 app.use(express.json());
 
@@ -18,6 +20,8 @@ app.use(express.json());
 app.use(express.static(path.join(__dirname, "../frontEnd")));
 
 // Rotas para as páginas HTML
+app.use("/", viewRoutes);
+
 app.use("/", loginRoutes);
 app.use("/", admRoutes);
 app.use("/", lojaRoutes);

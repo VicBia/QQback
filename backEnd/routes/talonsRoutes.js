@@ -8,7 +8,7 @@ const {
   deletarTalao,
 } = require("../services/talonsService");
 
-// Rota para servir a página de gestão de lojas
+// Rota para servir a página de gestão de talões
 router
   .route("/api/talons")
   .get(async (req, res) => {

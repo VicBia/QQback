@@ -9,9 +9,9 @@ const {
 } = require("../services/userService");
 
 // Rota para servir a página de login de usuários
-router.route("/login").get((req, res) => {
-  res.sendFile(path.join(__dirname, "../../frontEnd/login.html"));
-});
+// router.route("/login").get((req, res) => {
+//   res.sendFile(path.join(__dirname, "../../frontEnd/login.html"));
+// });
 
 // Rota para servir a página de cadastro de usuários
 router
@@ -104,24 +104,24 @@ router
     }
   });
 
-// Rota para servir a página de observação do registro
-router.get("/register_obs", (req, res) => {
-  res.sendFile(path.join(__dirname, "../../frontEnd/registerObs.html"));
-});
+// // Rota para servir a página de observação do registro
+// router.get("/register_obs", (req, res) => {
+//   res.sendFile(path.join(__dirname, "../../frontEnd/registerObs.html"));
+// });
 
-// Rota para servir a página de esqueci a password
-router.get("/forgot_password", (req, res) => {
-  res.sendFile(path.join(__dirname, "../../frontEnd/forgotPassword.html"));
-});
+// // Rota para servir a página de esqueci a password
+// router.get("/forgot_password", (req, res) => {
+//   res.sendFile(path.join(__dirname, "../../frontEnd/forgotPassword.html"));
+// });
 
-// Rota para servir a página de recuperar a password
-router.get("/token_password", (req, res) => {
-  res.sendFile(path.join(__dirname, "../../frontEnd/tokenPassword.html"));
-});
+// // Rota para servir a página de recuperar a password
+// router.get("/token_password", (req, res) => {
+//   res.sendFile(path.join(__dirname, "../../frontEnd/tokenPassword.html"));
+// });
 
-// Rota para servir a página de gestão de usuários
-router.get("/users", (req, res) => {
-  res.sendFile(path.join(__dirname, "../../frontEnd/pageAdm.html"));
-});
+// // Rota para servir a página de gestão de usuários
+// router.get("/users", (req, res) => {
+//   res.sendFile(path.join(__dirname, "../../frontEnd/pageAdm.html"));
+// });
 
 module.exports = router;
