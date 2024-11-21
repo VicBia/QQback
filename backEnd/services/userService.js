@@ -1,4 +1,5 @@
 const pool = require("../config/database");
+const bcrypt = require('bcrypt');
 
 // Função para inserir um novo usuário
 async function inserirUsuario(
@@ -10,6 +11,7 @@ async function inserirUsuario(
 ) {
   // Captura a data e hora atual
   const registration_date = new Date();
+  const passwordEncrypted = await bcrypt.hash(user_password, 10);
 
   const query = `
       INSERT INTO users (registration, user_name, email, user_password, id_store, registration_date)
@@ -21,7 +23,7 @@ async function inserirUsuario(
     registration,
     user_name,
     email,
-    user_password,
+    passwordEncrypted,
     id_store,
     registration_date,
   ];
@@ -101,19 +103,34 @@ async function editarUsuario(
   }
 }
 
-// Função para excluir um usuário
+// Função para excluir um usuário e suas associações
 async function deletarUsuario(registration) {
-  const query = `
-          DELETE FROM users
-          WHERE registration = $1
-          RETURNING *;
-      `;
-
   try {
-    const resultado = await pool.query(query, [registration]);
+    await pool.query("BEGIN");
+
+    // Exclui as associações da tabela userprofile
+    const deletarAssociacoesQuery = `
+      DELETE FROM userprofile
+      WHERE registration = $1;
+    `;
+    await pool.query(deletarAssociacoesQuery, [registration]);
+
+    // Exclui o usuário da tabela users
+    const deletarUsuarioQuery = `
+      DELETE FROM users
+      WHERE registration = $1
+      RETURNING *;
+    `;
+    const resultado = await pool.query(deletarUsuarioQuery, [registration]);
+
+    // Confirma a transação
+    await pool.query("COMMIT");
+
     return resultado.rows[0]; // Retorna o usuário excluído, ou undefined se não encontrado
   } catch (erro) {
-    console.error("Erro ao excluir usuário:", erro);
+    // Em caso de erro, desfaz a transação
+    await pool.query("ROLLBACK");
+    console.error("Erro ao excluir usuário e associações:", erro);
     throw erro;
   }
 }

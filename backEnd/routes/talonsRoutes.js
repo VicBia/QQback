@@ -4,11 +4,11 @@ const talonsController = require("../controllers/talonsController");
 
 // Rotas
 router
-  .route("/api/stock")
+  .route("/api/talons")
   .get(talonsController.listTalons)
   .post(talonsController.registerTalon);
 router
-  .route("/api/stock/:id_talon")
+  .route("/api/talons/:id_talon")
   .put(talonsController.editTalon)
   .delete(talonsController.deleteTalon);
 
