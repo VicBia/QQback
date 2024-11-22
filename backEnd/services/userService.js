@@ -1,5 +1,5 @@
 const pool = require("../config/database");
-const bcrypt = require('bcrypt');
+const bcrypt = require("bcrypt");
 
 // Função para inserir um novo usuário
 async function inserirUsuario(

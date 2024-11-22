@@ -1,15 +1,16 @@
 const express = require("express");
 const router = express.Router();
 const storeController = require("../controllers/storeController");
+const authenticateToken = require("../middlewares/authMiddleware"); // Middleware de autenticação
 
 // Rotas
 router
   .route("/api/store")
-  .get(storeController.listStore)
-  .post(storeController.registerStore);
+  .get(authenticateToken, storeController.listStore)
+  .post(authenticateToken, storeController.registerStore);
 router
   .route("/api/store/:id_store")
-  .put(storeController.editStore)
-  .delete(storeController.deleteStore);
+  .put(authenticateToken, storeController.editStore)
+  .delete(authenticateToken, storeController.deleteStore);
 
 module.exports = router;

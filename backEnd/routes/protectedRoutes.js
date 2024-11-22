@@ -2,7 +2,7 @@ const express = require("express");
 const router = express.Router();
 const authenticateToken = require("../middlewares/authMiddleware");
 
-// Rota protegida
+// Rota protegida TESTE
 router.get("/me", authenticateToken, (req, res) => {
   res
     .status(200)

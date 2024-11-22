@@ -1,15 +1,17 @@
 const express = require("express");
 const router = express.Router();
 const profileController = require("../controllers/profileController");
+const authenticateToken = require("../middlewares/authMiddleware"); // Middleware de autenticação
 
-// Rotas
+// Rotas protegidas
 router
   .route("/api/profile")
-  .get(profileController.listProfiles)
-  .post(profileController.registerProfile);
+  .get(authenticateToken, profileController.listProfiles) // Protegendo a rota de listagem
+  .post(authenticateToken, profileController.registerProfile); // Protegendo a rota de registro
+
 router
   .route("/api/profile/:id_profile")
-  .put(profileController.editProfile)
-  .delete(profileController.deleteProfile);
+  .put(authenticateToken, profileController.editProfile) // Protegendo a rota de edição
+  .delete(authenticateToken, profileController.deleteProfile); // Protegendo a rota de exclusão
 
 module.exports = router;

@@ -1,16 +1,16 @@
 const express = require("express");
 const router = express.Router();
 const userProfileController = require("../controllers/userProfileController");
+const authenticateToken = require("../middlewares/authMiddleware"); // Middleware de autenticação
 
 // Rotas
 router
   .route("/api/association")
-  .get(userProfileController.listUserProfiles)
-  .post(userProfileController.registerUserProfile);
+  .get(authenticateToken, userProfileController.listUserProfiles)
+  .post(authenticateToken, userProfileController.registerUserProfile);
 router
   .route("/api/association/:registration")
-  .put(userProfileController.editUserProfile)
-  .delete(userProfileController.deleteUserProfile);
+  .put(authenticateToken, userProfileController.editUserProfile)
+  .delete(authenticateToken, userProfileController.deleteUserProfile);
 
 module.exports = router;
-
