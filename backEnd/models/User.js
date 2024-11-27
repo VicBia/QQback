@@ -20,7 +20,7 @@ const User = sequelize.define(
       allowNull: false,
     },
     user_password: {
-      type: DataTypes.STRING(100),
+      type: DataTypes.STRING(500),
       allowNull: false,
     },
     id_store: {
@@ -42,6 +42,6 @@ const User = sequelize.define(
 );
 
 Store.hasMany(User, { foreignKey: "id_store" });
-User.belongsTo(User, { foreignKey: "id_store" });
+User.belongsTo(Store, { foreignKey: "id_store" });
 
 module.exports = User;

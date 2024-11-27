@@ -1,72 +1,61 @@
-const pool = require("../config/database");
+const Store = require("../models/Store");
 
 // Função para inserir uma nova loja
 async function inserirLoja(store_number, store_name) {
-  const query = `
-        INSERT INTO store (store_number, store_name)
-        VALUES ($1, $2)
-        RETURNING *;
-    `;
-
-  const valores = [store_number, store_name];
-
   try {
-    const resultado = await pool.query(query, valores);
-    return resultado.rows[0]; // Retorna a loja inserida
+    const novaLoja = await Store.create({
+      store_number,
+      store_name,
+    });
+    return novaLoja; // Retorna a loja inserida
   } catch (erro) {
     console.error("Erro ao inserir loja:", erro);
     throw erro;
   }
 }
 
-// Função para consultar todos as lojas
+// Função para consultar todas as lojas
 async function consultarLojas() {
-  const query = `
-      SELECT * FROM store;
-  `;
-
   try {
-    const resultado = await pool.query(query);
-    return resultado.rows; // Retorna todas as lojas
+    const lojas = await Store.findAll();
+    return lojas; // Retorna todas as lojas
   } catch (erro) {
-    console.error("Erro ao consultar os perfis:", erro);
+    console.error("Erro ao consultar as lojas:", erro);
     throw erro;
   }
 }
 
 // Função para editar uma loja
 async function editarLoja(id_store, store_number, store_name) {
-  const query = `
-      UPDATE store
-      SET store_number = $2, store_name = $3
-      WHERE id_store = $1
-      RETURNING *;
-  `;
-
-  const valores = [id_store, store_number, store_name];
-
   try {
-    const resultado = await pool.query(query, valores);
-    return resultado.rows[0]; // Retorna a loja atualizada
+    const lojaAtualizada = await Store.update(
+      {
+        store_number,
+        store_name,
+      },
+      {
+        where: { id_store },
+        returning: true, 
+      }
+    );
+    
+    return lojaAtualizada[1][0]; // Retorna a loja atualizada
   } catch (erro) {
-    console.error("Erro ao editar perfil:", erro);
+    console.error("Erro ao editar loja:", erro);
     throw erro;
   }
 }
 
 // Função para excluir uma loja
 async function deletarLoja(id_store) {
-  const query = `
-      DELETE FROM store
-      WHERE id_store = $1
-      RETURNING *;
-  `;
-
   try {
-    const resultado = await pool.query(query, [id_store]);
-    return resultado.rows[0]; // Retorna a loja excluída, ou undefined se não encontrado
+    const deleted = await Store.destroy({
+      where: { id_store },
+    });
+    
+    return deleted === 1;
   } catch (erro) {
-    console.error("Erro ao deletar perfil:", erro);
+    console.error("Erro ao deletar loja:", erro);
     throw erro;
   }
 }

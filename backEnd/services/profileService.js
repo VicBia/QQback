@@ -1,33 +1,22 @@
 const pool = require("../config/database");
+const Profile = require("../models/Profile");
 
 // Função para inserir um novo perfil
 async function inserirPerfil(profile_name, description) {
-  const query = `
-        INSERT INTO profile (profile_name, description)
-        VALUES ($1, $2)
-        RETURNING *;
-    `;
-
-  const valores = [profile_name, description];
-
   try {
-    const resultado = await pool.query(query, valores);
-    return resultado.rows[0]; // Retorna o perfil inserido
-  } catch (erro) {
-    console.error("Erro ao inserir perfil:", erro);
-    throw erro;
+    const novoPerfil = await Profile.create({ profile_name, description });
+    return novoPerfil; // Retorna o perfil inserido
+  } catch (error) {
+    console.error("Erro ao inserir perfil:", error);
+    throw error;
   }
 }
 
 // Função para consultar todos os perfils
 async function consultarPerfis() {
-  const query = `
-      SELECT * FROM profile;
-  `;
-
   try {
-    const resultado = await pool.query(query);
-    return resultado.rows; // Retorna todos os perfils
+    const perfis = await Profile.findAll();
+    return perfis; // Retorna todos os perfils
   } catch (erro) {
     console.error("Erro ao consultar os perfis:", erro);
     throw erro;

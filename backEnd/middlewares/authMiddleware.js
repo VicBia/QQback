@@ -2,7 +2,7 @@ const { verifyToken } = require("../config/jwtConfig");
 
 // Middleware para autenticação via JWT
 function authenticateMiddleware(req, res, next) {
-  const token = req.header("Authorization")?.split(" ")[1]; // Extrai o token do cabeçalho Authorization
+  const token = req.header("Authorization") // Extrai o token do cabeçalho Authorization
 
   if (!token) {
     return res.status(401).json({ message: "Token não fornecido!" });
@@ -11,9 +11,9 @@ function authenticateMiddleware(req, res, next) {
   try {
     const cleanToken = token.startsWith("Bearer ") ? token.slice(7) : token;
 
-    const token = verifyToken(cleanToken);
+    const decoded = verifyToken(cleanToken);
 
-    req.user = token;
+    req.user = decoded;
 
     next();
   } catch (error) {

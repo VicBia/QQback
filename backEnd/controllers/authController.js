@@ -14,21 +14,18 @@ exports.authLogin = async (req, res) => {
     const user = await User.findOne({
       where: { email: email.trim().toLowerCase() },
     });
-    
+
     if (!user) {
       console.log("Usuário não encontrado para o email:", email);
       return res.status(404).json({ message: "Usuário não encontrado!" });
     } else {
       console.log("Usuário encontrado:", user);
     }
-    
 
-    // if (!user) {
-    //   console.log("Usuário não encontrado para o email:", email);
-    //   return res.status(401).json({ message: "Credenciais inválidas!" });
-    // }
-
-    const validPassword = await comparePassword(user_password, user.user_password);
+    const validPassword = await comparePassword(
+      user_password,
+      user.user_password
+    );
     if (!validPassword) {
       return res.status(401).json({ message: "Credenciais inválidas!" });
     }

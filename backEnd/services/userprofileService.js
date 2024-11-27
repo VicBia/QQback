@@ -1,82 +1,70 @@
-const pool = require("../config/database");
+const UserProfile = require("../models/UserProfile");
 
-// Função para inserir um novo usuário
+// Função para inserir uma nova associação
 async function inserirAssociacao(registration, id_profile) {
   // Captura a data e hora atual
   const association_date = new Date();
 
-  const query = `
-        INSERT INTO userprofile (registration, id_profile, association_date)
-        VALUES ($1, $2, $3)
-`;
-
-  const valores = [registration, id_profile, association_date];
-
   try {
-    const resultado = await pool.query(query, valores);
-    return resultado.rows[0]; // Retorna o usuário inserido
+    const novaAssociacao = await UserProfile.create({
+      registration,
+      id_profile,
+      association_date,
+    });
+
+    return novaAssociacao; // Retorna a nova associação criada
   } catch (erro) {
-    console.error("Erro ao inserir usuário:", erro);
+    console.error("Erro ao inserir associação:", erro);
     throw erro;
   }
 }
 
-// Função para consultar todos os usuários
+// Função para consultar todas as associações
 async function consultarAssociacao() {
-  const query = `
-        SELECT * FROM userprofile;
-    `;
-
   try {
-    const resultado = await pool.query(query);
-    return resultado.rows; // Retorna todos os usuários
+    const associacoes = await UserProfile.findAll();
+    return associacoes; // Retorna todas as associações
   } catch (erro) {
     console.error("Erro ao consultar as associações:", erro);
     throw erro;
   }
 }
 
-// Função para editar um usuário
-async function editarAssociacao(
-  registration,
-  id_profile
-) {
-  // Atualiza a data de registro no momento da edição
+// Função para editar uma associação
+async function editarAssociacao(registration, id_profile) {
   const association_date = new Date();
 
-  const query = `
-          UPDATE userprofile
-          SET id_profile = $2, association_date = $3
-          WHERE registration = $1
-          RETURNING *;
-      `;
-
-  const valores = [
-    registration,
-    id_profile,
-    association_date
-  ];
-
   try {
-    const resultado = await pool.query(query, valores);
-    return resultado.rows[0]; // Retorna a associação atualizado
+    const [updated] = await UserProfile.update(
+      {
+        id_profile,
+        association_date,
+      },
+      {
+        where: { registration },
+        returning: true, 
+      }
+    );
+
+    if (updated) {
+      const associacaoAtualizada = await UserProfile.findOne({ where: { registration } });
+      return associacaoAtualizada; // Retorna a associação atualizada
+    }
+    throw new Error('Associação não encontrada');
   } catch (erro) {
     console.error("Erro ao editar associação:", erro);
     throw erro;
   }
 }
 
-// Função para excluir um usuário
+// Função para excluir uma associação
 async function deletarAssociacao(registration, id_profile) {
-  const query = `
-        DELETE FROM userprofile
-        WHERE registration = $1 AND id_profile = $2
-        RETURNING *;
-  `;
-
   try {
-    const resultado = await pool.query(query, [registration, id_profile]);
-    return resultado.rowCount > 0 ? resultado.rows[0] : null; // Retorna o usuário excluído, ou undefined se não encontrado
+    const deleted = await UserProfile.destroy({
+      where: { registration, id_profile },
+    });
+
+    return deleted ? { registration, id_profile } : null; 
   } catch (erro) {
     console.error("Erro ao excluir associação:", erro);
     throw erro;

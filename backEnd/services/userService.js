@@ -1,6 +1,7 @@
 const pool = require("../config/database");
-const bcrypt = require("bcrypt");
 const { hashPassword } = require("../utils/hashPassword");
+const User = require("../models/User");
+const UserProfile = require("../models/UserProfile");
 
 // Função para inserir um novo usuário
 async function inserirUsuario(
@@ -10,43 +11,30 @@ async function inserirUsuario(
   user_password,
   id_store
 ) {
-  // Captura a data e hora atual
   const registration_date = new Date();
-  const passwordEncrypted = hashPassword(user_password);
-
-  const query = `
-      INSERT INTO users (registration, user_name, email, user_password, id_store, registration_date)
-    VALUES ($1, $2, $3, $4, $5, $6)
-    RETURNING *;
-`;
-
-  const valores = [
-    registration,
-    user_name,
-    email,
-    passwordEncrypted,
-    id_store,
-    registration_date,
-  ];
+  const passwordEncrypted = await hashPassword(user_password);
 
   try {
-    const resultado = await pool.query(query, valores);
-
-    // Inserindo também na tabela UserProfile
-    const associarPerfilQuery = `
-        INSERT INTO userprofile (registration, id_profile, association_date)
-        VALUES ($1, $2, $3)
-    `;
-    const perfil_id = 2; // Defina o ID do perfil que deseja associar, pode vir de outra lógica
-    const associacaoData = new Date(); // Data de associação
-
-    await pool.query(associarPerfilQuery, [
+    const novoUsuario = await User.create({
       registration,
-      perfil_id,
-      associacaoData,
-    ]);
+      user_name,
+      email,
+      user_password: passwordEncrypted, 
+      id_store,
+      registration_date,
+    });
 
-    return resultado.rows[0]; // Retorna o usuário inserido
+    const perfil_id = 1; 
+    const associacaoData = new Date(); 
+
+    // Criar a associação do perfil
+    await UserProfile.create({
+      registration: novoUsuario.registration, 
+      id_profile: perfil_id,
+      association_date: associacaoData,
+    });
+
+    return novoUsuario; 
   } catch (erro) {
     console.error("Erro ao inserir usuário:", erro);
     throw erro;
@@ -55,13 +43,9 @@ async function inserirUsuario(
 
 // Função para consultar todos os usuários
 async function consultarUsuarios() {
-  const query = `
-        SELECT * FROM users;
-    `;
-
   try {
-    const resultado = await pool.query(query);
-    return resultado.rows; // Retorna todos os usuários
+    const usuarios = await User.findAll();
+    return usuarios; 
   } catch (erro) {
     console.error("Erro ao consultar os usuários:", erro);
     throw erro;
@@ -76,7 +60,6 @@ async function editarUsuario(
   user_password,
   id_store
 ) {
-  // Atualiza a data de registro no momento da edição
   const registration_date = new Date();
 
   const query = `
