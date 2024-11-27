@@ -1,5 +1,6 @@
 const pool = require("../config/database");
 const bcrypt = require("bcrypt");
+const { hashPassword } = require("../utils/hashPassword");
 
 // Função para inserir um novo usuário
 async function inserirUsuario(
@@ -11,7 +12,7 @@ async function inserirUsuario(
 ) {
   // Captura a data e hora atual
   const registration_date = new Date();
-  const passwordEncrypted = await bcrypt.hash(user_password, 10);
+  const passwordEncrypted = hashPassword(user_password);
 
   const query = `
       INSERT INTO users (registration, user_name, email, user_password, id_store, registration_date)

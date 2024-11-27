@@ -3,29 +3,35 @@ const sequelize = require("../config/database");
 const User = require("./User");
 const Profile = require("./Profile");
 
-const UserProfile = sequelize.define("UserProfile", {
-  registration: {
-    type: DataTypes.STRING(10),
-    references: {
-      model: User,
-      key: "registration",
+const UserProfile = sequelize.define(
+  "UserProfile",
+  {
+    registration: {
+      type: DataTypes.STRING(10),
+      references: {
+        model: User,
+        key: "registration",
+      },
+      primaryKey: true,
     },
-    primaryKey: true,
-  },
-  id_profile: {
-    type: DataTypes.INTEGER,
-    references: {
-      model: Profile,
-      key: "id_profile",
+    id_profile: {
+      type: DataTypes.INTEGER,
+      references: {
+        model: Profile,
+        key: "id_profile",
+      },
+      primaryKey: true,
     },
-    primaryKey: true,
+    association_date: {
+      type: DataTypes.DATE,
+      allowNull: false,
+      defaultValue: DataTypes.NOW,
+    },
   },
-  association_date: {
-    type: DataTypes.DATE,
-    allowNull: false,
-    defaultValue: DataTypes.NOW,
-  },
-});
+  {
+    timestamps: false,
+  }
+);
 
 User.belongsToMany(Profile, {
   through: UserProfile,

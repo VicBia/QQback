@@ -1,16 +1,16 @@
 const express = require("express");
 const router = express.Router();
 const transactionController = require("../controllers/transactionController");
-const authenticateToken = require("../middlewares/authMiddleware"); // Middleware de autenticação
+const authenticateMiddleware = require("../middlewares/authMiddleware"); // Middleware de autenticação
 
 // Rotas
 router
   .route("/api/send")
-  .get(authenticateToken, transactionController.listTransactions)
-  .post(authenticateToken, transactionController.registerTransaction);
+  .get(authenticateMiddleware, transactionController.listTransactions)
+  .post(authenticateMiddleware, transactionController.registerTransaction);
 router
   .route("/api/send/:id_transaction")
-  .put(authenticateToken, transactionController.editTransaction)
-  .delete(authenticateToken, transactionController.deleteTransaction);
+  .put(authenticateMiddleware, transactionController.editTransaction)
+  .delete(authenticateMiddleware, transactionController.deleteTransaction);
 
 module.exports = router;

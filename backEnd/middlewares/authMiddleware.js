@@ -1,21 +1,24 @@
-const jwt = require('jsonwebtoken');
+const { verifyToken } = require("../config/jwtConfig");
 
 // Middleware para autenticação via JWT
-function authenticateToken(req, res, next) {
-    const token = req.header('Authorization')?.split(' ')[1]; // Extrai o token do cabeçalho Authorization
+function authenticateMiddleware(req, res, next) {
+  const token = req.header("Authorization")?.split(" ")[1]; // Extrai o token do cabeçalho Authorization
 
-    if (!token) {
-        return res.status(401).json({ message: 'Token não fornecido!' });
-    }
+  if (!token) {
+    return res.status(401).json({ message: "Token não fornecido!" });
+  }
 
-    jwt.verify(token, process.env.JWT_SECRET || 'seu-segredo', (err, user) => {
-        if (err) {
-            return res.status(403).json({ message: 'Token inválido!' });
-        }
+  try {
+    const cleanToken = token.startsWith("Bearer ") ? token.slice(7) : token;
 
-        req.user = user; // Adiciona o usuário autenticado à requisição
-        next();
-    });
+    const token = verifyToken(cleanToken);
+
+    req.user = token;
+
+    next();
+  } catch (error) {
+    res.status(401).json({ message: error.message });
+  }
 }
 
-module.exports = authenticateToken;
+module.exports = authenticateMiddleware;

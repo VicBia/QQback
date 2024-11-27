@@ -1,9 +1,9 @@
 const express = require("express");
 const router = express.Router();
-const authenticateToken = require("../middlewares/authMiddleware");
+const authenticateMiddleware = require("../middlewares/authMiddleware");
 
 // Rota protegida TESTE
-router.get("/me", authenticateToken, (req, res) => {
+router.get("/me", authenticateMiddleware, (req, res) => {
   res
     .status(200)
     .json({ message: "Você acessou uma rota protegida!", user: req.user });

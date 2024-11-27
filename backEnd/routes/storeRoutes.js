@@ -1,16 +1,16 @@
 const express = require("express");
 const router = express.Router();
 const storeController = require("../controllers/storeController");
-const authenticateToken = require("../middlewares/authMiddleware"); // Middleware de autenticação
+const authenticateMiddleware = require("../middlewares/authMiddleware"); // Middleware de autenticação
 
 // Rotas
 router
   .route("/api/store")
-  .get(authenticateToken, storeController.listStore)
-  .post(authenticateToken, storeController.registerStore);
+  .get(authenticateMiddleware, storeController.listStore)
+  .post(authenticateMiddleware, storeController.registerStore);
 router
   .route("/api/store/:id_store")
-  .put(authenticateToken, storeController.editStore)
-  .delete(authenticateToken, storeController.deleteStore);
+  .put(authenticateMiddleware, storeController.editStore)
+  .delete(authenticateMiddleware, storeController.deleteStore);
 
 module.exports = router;

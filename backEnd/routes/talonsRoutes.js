@@ -1,16 +1,16 @@
 const express = require("express");
 const router = express.Router();
 const talonsController = require("../controllers/talonsController");
-const authenticateToken = require("../middlewares/authMiddleware"); // Middleware de autenticação
+const authenticateMiddleware = require("../middlewares/authMiddleware"); // Middleware de autenticação
 
 // Rotas
 router
   .route("/api/talons")
-  .get(authenticateToken, talonsController.listTalons)
-  .post(authenticateToken, talonsController.registerTalon);
+  .get(authenticateMiddleware, talonsController.listTalons)
+  .post(authenticateMiddleware, talonsController.registerTalon);
 router
   .route("/api/talons/:id_talon")
-  .put(authenticateToken, talonsController.editTalon)
-  .delete(authenticateToken, talonsController.deleteTalon);
+  .put(authenticateMiddleware, talonsController.editTalon)
+  .delete(authenticateMiddleware, talonsController.deleteTalon);
 
 module.exports = router;
