@@ -35,11 +35,11 @@ async function editarLoja(id_store, store_number, store_name) {
       },
       {
         where: { id_store },
-        returning: true, 
+        returning: true,
       }
     );
-    
-    return lojaAtualizada[1][0]; // Retorna a loja atualizada
+
+    return lojaAtualizada; // Retorna a loja atualizada
   } catch (erro) {
     console.error("Erro ao editar loja:", erro);
     throw erro;
@@ -52,7 +52,7 @@ async function deletarLoja(id_store) {
     const deleted = await Store.destroy({
       where: { id_store },
     });
-    
+
     return deleted === 1;
   } catch (erro) {
     console.error("Erro ao deletar loja:", erro);

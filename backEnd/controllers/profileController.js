@@ -32,12 +32,12 @@ exports.registerProfile = async (req, res) => {
 };
 
 exports.editProfile = async (req, res) => {
-  const { id_perfil } = req.params;
+  const { id_profile } = req.params;
   const { profile_name, description } = req.body;
 
   try {
     const perfilAtualizado = await profileService.editarPerfil(
-      id_perfil,
+      id_profile,
       profile_name,
       description
     );
@@ -57,10 +57,10 @@ exports.editProfile = async (req, res) => {
 };
 
 exports.deleteProfile = async (req, res) => {
-  const { id_perfil } = req.params;
+  const { id_profile } = req.params;
 
   try {
-    const PerfilExcluido = await profileService.deletarPerfil(id_perfil);
+    const PerfilExcluido = await profileService.deletarPerfil(id_profile);
     if (PerfilExcluido) {
       res.status(200).json({
         message: "Perfil excluído com sucesso!",

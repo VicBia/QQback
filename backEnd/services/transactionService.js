@@ -1,22 +1,18 @@
-const pool = require("../config/database");
+const Transaction = require("../models/Transaction");
 
-// Função para consultar todos os talões
-async function consultarEnvio() {
-  const query = `
-        SELECT * FROM transaction;
-    `;
-
+// Função para consultar todas as transações
+async function consultarTransacao() {
   try {
-    const resultado = await pool.query(query);
-    return resultado.rows; // Retorna todos os talões
+    const transacoes = await Transaction.findAll();
+    return transacoes; // Retorna todas as transações
   } catch (erro) {
     console.error("Erro ao consultar os talões:", erro);
     throw erro;
   }
 }
 
-// Função para inserir o envio na tabela transacoes/envio
-async function inserirEnvio(
+// Função para inserir uma nova transação
+async function inserirTransacao(
   shipment = null,
   id_talon,
   status,
@@ -25,34 +21,26 @@ async function inserirEnvio(
   receipt_transaction = null,
   received_by_registration = null
 ) {
-  const queryInsert = `
-        INSERT INTO transaction (shipment, id_talon, status, shipment_transaction, expected_time, receipt_transaction, received_by_registration)
-        VALUES ($1, $2, $3, $4, $5, $6, $7)
-        RETURNING *;
-    `;
-
-  const valores = [
-    shipment,
-    id_talon,
-    status,
-    shipment_transaction,
-    expected_time,
-    receipt_transaction,
-    received_by_registration,
-  ];
-
   try {
-    // Executar o INSERT na tabela de transações
-    const resultado = await pool.query(queryInsert, valores);
-    return resultado.rows[0]; // Retorna o envio inserido
+    const novaTransacao = await Transaction.create({
+      shipment,
+      id_talon,
+      status,
+      shipment_transaction,
+      expected_time,
+      receipt_transaction,
+      received_by_registration,
+    });
+
+    return novaTransacao; // Retorna a transação inserida
   } catch (erro) {
-    console.error("Erro ao inserir envio:", erro);
+    console.error("Erro ao inserir transação:", erro);
     throw erro;
   }
 }
 
-// Função para atualizar a tabela transações
-async function atualizarTalao(
+// Função para atualizar uma transação existente
+async function atualizarTransacao(
   id_transaction,
   shipment = null,
   id_talon,
@@ -62,49 +50,54 @@ async function atualizarTalao(
   receipt_transaction = null,
   received_by_registration = null
 ) {
-  const queryUpdate = `
-        UPDATE transaction
-        SET shipment = $2, id_talon = $3, status = $4, shipment_transaction = $5, expected_time = $6, receipt_transaction = $7, received_by_registration = $8
-        WHERE id_transaction = $1
-        RETURNING *;
-    `;
-
-  const valores = [
-    id_transaction,
-    shipment,
-    id_talon,
-    status,
-    shipment_transaction,
-    expected_time,
-    receipt_transaction,
-    received_by_registration,
-  ];
-
   try {
-    // Executar o UPDATE na tabela taloes
-    const resultado = await pool.query(queryUpdate, valores);
-    return resultado.rows[0]; // Retorna o talão atualizado
+    const transacaoAtualizada = await Transaction.update(
+      {
+        shipment,
+        id_talon,
+        status,
+        shipment_transaction,
+        expected_time,
+        receipt_transaction,
+        received_by_registration,
+      },
+      {
+        where: { id_transaction },
+        returning: true, // Retorna o registro atualizado
+      }
+    );
+
+    if (transacaoAtualizada[0] === 0) {
+      return null;
+    }
+    return transacaoAtualizada; // Retorna a transação atualizada
   } catch (erro) {
-    console.error("Erro ao atualizar talão:", erro);
+    console.error("Erro ao atualizar transação:", erro);
     throw erro;
   }
 }
 
-// Função para excluir um envio
-async function deletarTalao(id_transaction) {
-  const query = `
-        DELETE FROM transaction
-        WHERE id_transaction = $1
-        RETURNING *;
-    `;
-
+// Função para excluir uma transação
+async function deletarTransacao(id_transaction) {
   try {
-    const resultado = await pool.query(query, [id_transaction]);
-    return resultado.rows[0]; // Retorna o talão excluído, ou undefined se não encontrado
+    const transacaoDeletada = await Transaction.destroy({
+      where: { id_transaction },
+      returning: true, // Retorna o registro deletado
+    });
+
+    if (transacaoDeletada === 0) {
+      return null; // Se não encontrar a transação para excluir
+    }
+    return transacaoDeletada; // Retorna a transação excluída
   } catch (erro) {
-    console.error("Erro ao excluir talão:", erro);
+    console.error("Erro ao excluir transação:", erro);
     throw erro;
   }
 }
 
-module.exports = { consultarEnvio, inserirEnvio, atualizarTalao, deletarTalao };
+module.exports = {
+  consultarTransacao,
+  inserirTransacao,
+  atualizarTransacao,
+  deletarTransacao,
+};

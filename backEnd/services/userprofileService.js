@@ -42,15 +42,17 @@ async function editarAssociacao(registration, id_profile) {
       },
       {
         where: { registration },
-        returning: true, 
+        returning: true,
       }
     );
 
     if (updated) {
-      const associacaoAtualizada = await UserProfile.findOne({ where: { registration } });
+      const associacaoAtualizada = await UserProfile.findOne({
+        where: { registration },
+      });
       return associacaoAtualizada; // Retorna a associação atualizada
     }
-    throw new Error('Associação não encontrada');
+    throw new Error("Associação não encontrada");
   } catch (erro) {
     console.error("Erro ao editar associação:", erro);
     throw erro;
@@ -64,7 +66,7 @@ async function deletarAssociacao(registration, id_profile) {
       where: { registration, id_profile },
     });
 
-    return deleted ? { registration, id_profile } : null; 
+    return deleted ? { registration, id_profile } : null;
   } catch (erro) {
     console.error("Erro ao excluir associação:", erro);
     throw erro;

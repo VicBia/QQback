@@ -3,7 +3,7 @@ const transactionService = require("../services/transactionService");
 // Rota para servir a página de transações
 exports.listTransactions = async (req, res) => {
   try {
-    const taloes = await transactionService.consultarEnvio();
+    const taloes = await transactionService.consultarTransacao();
     res.status(200).json(taloes); // Retorna todas as solicitações de talões
   } catch (erro) {
     res
@@ -25,7 +25,7 @@ exports.registerTransaction = async (req, res) => {
 
   try {
     // Inserir o envio na tabela de transações
-    const novaSolicitacao = await transactionService.inserirEnvio(
+    const novaSolicitacao = await transactionService.inserirTransacao(
       shipment,
       id_talon,
       status,
@@ -60,7 +60,7 @@ exports.editTransaction = async (req, res) => {
   } = req.body;
 
   try {
-    const talaoAtualizado = await transactionService.atualizarTalao(
+    const talaoAtualizado = await transactionService.atualizarTransacao(
       id_transaction,
       shipment,
       id_talon,
@@ -89,7 +89,9 @@ exports.deleteTransaction = async (req, res) => {
   const { id_transaction } = req.params;
 
   try {
-    const talaoExcluido = await transactionService.deletarTalao(id_transaction);
+    const talaoExcluido = await transactionService.deletarTransacao(
+      id_transaction
+    );
     if (talaoExcluido) {
       res.status(200).json({
         message: "Talão excluído com sucesso!",
