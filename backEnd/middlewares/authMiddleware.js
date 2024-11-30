@@ -3,7 +3,7 @@ const cookie = require("cookie");
 
 // Middleware para autenticação via JWT
 function authenticateMiddleware(req, res, next) {
-  const cookies = cookie.parse(req.headers.cookie || "");
+  const cookies = req.headers.cookie ? cookie.parse(req.headers.cookie) : {};
   const token = cookies.auth_token;
 
   if (!token) {
@@ -13,13 +13,20 @@ function authenticateMiddleware(req, res, next) {
   try {
     const cleanToken = token.startsWith("Bearer ") ? token.slice(7) : token;
 
+    // Verifica e decodifica o token JWT
     const decoded = verifyToken(cleanToken);
 
-    req.user = decoded;
+    if (!decoded || !decoded.profiles) {
+      return res
+        .status(403)
+        .json({ message: "Perfil de usuário não encontrado no token!" });
+    }
 
+    req.user = decoded; // Atribui o usuário decodificado ao objeto req
     next();
   } catch (error) {
-    res.status(401).json({ message: error.message });
+    // Retorna mensagem de erro detalhada
+    res.status(401).json({ message: `Token inválido: ${error.message}` });
   }
 }
 

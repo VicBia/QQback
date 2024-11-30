@@ -1,5 +1,6 @@
 const express = require("express");
 const path = require("path");
+const cors = require("cors"); // Importando o CORS
 
 // Arquivos de rota
 const loginRoutes = require("./routes/userRoutes");
@@ -18,6 +19,9 @@ const viewRoutes = require("./routes/viewRoutes");
 
 const app = express();
 app.use(express.json());
+
+// Configuração do CORS (permite requisições de qualquer origem)
+app.use(cors()); // Adicionando o middleware de CORS
 
 // Middleware para servir arquivos estáticos (CSS e JS)
 app.use(express.static(path.join(__dirname, "../frontEnd")));

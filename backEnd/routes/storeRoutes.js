@@ -1,16 +1,34 @@
 const express = require("express");
 const router = express.Router();
 const storeController = require("../controllers/storeController");
-const authenticateMiddleware = require("../middlewares/authMiddleware"); // Middleware de autenticação
+const authenticateMiddleware = require("../middlewares/authMiddleware");
+const acessMiddleware = require("../middlewares/acessMiddleware");
 
-// Rotas
+// Rotas da loja (store)
 router
   .route("/api/store")
-  .get(authenticateMiddleware, storeController.listStore)
-  .post(authenticateMiddleware, storeController.registerStore);
+  .get(
+    authenticateMiddleware,
+    acessMiddleware(["store"]),
+    storeController.listStore
+  )
+  .post(
+    authenticateMiddleware,
+    acessMiddleware(["store"]),
+    storeController.registerStore
+  );
+
 router
   .route("/api/store/:id_store")
-  .put(authenticateMiddleware, storeController.editStore)
-  .delete(authenticateMiddleware, storeController.deleteStore);
+  .put(
+    authenticateMiddleware,
+    acessMiddleware(["store"]),
+    storeController.editStore
+  )
+  .delete(
+    authenticateMiddleware,
+    acessMiddleware(["store"]),
+    storeController.deleteStore
+  );
 
 module.exports = router;

@@ -36,7 +36,13 @@ const UserProfile = sequelize.define(
 User.belongsToMany(Profile, {
   through: UserProfile,
   foreignKey: "registration",
+  as: "profiles", 
 });
-Profile.belongsToMany(User, { through: UserProfile, foreignKey: "id_profile" });
+
+Profile.belongsToMany(User, {
+  through: UserProfile,
+  foreignKey: "id_profile",
+  as: "users", 
+});
 
 module.exports = UserProfile;

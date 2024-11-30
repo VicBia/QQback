@@ -2,9 +2,11 @@ const express = require("express");
 const path = require("path");
 const router = express.Router();
 const authenticateMiddleware = require("../middlewares/authMiddleware");
+const authController = require("../controllers/authController");
+const acessMiddleware = require("../middlewares/acessMiddleware");
 
 // Rota para servir a página de login de usuários
-router.route("/login").get((req, res) => {
+router.get("/login", (req, res) => {
   res.sendFile(path.join(__dirname, "../../frontEnd/login.html"));
 });
 
@@ -29,48 +31,93 @@ router.get("/token_senha", (req, res) => {
 });
 
 // Rota para servir a página de gestão de usuários
-router.get("/gestao_usuarios", authenticateMiddleware, (req, res) => {
-  res.sendFile(path.join(__dirname, "../../frontEnd/pageAdm.html"));
-});
+router.get(
+  "/gestao_usuarios",
+  authenticateMiddleware,
+  acessMiddleware(["users"]),
+  (req, res) => {
+    res.sendFile(path.join(__dirname, "../../frontEnd/pageAdm.html"));
+  }
+);
 
 // Rota para servir a página de gestão do perfis
-router.get("/gestao_perfis", authenticateMiddleware, (req, res) => {
-  res.sendFile(path.join(__dirname, "../../frontEnd/pagePerfis.html"));
-});
+router.get(
+  "/gestao_perfis",
+  authenticateMiddleware,
+  acessMiddleware(["profile"]),
+  (req, res) => {
+    res.sendFile(path.join(__dirname, "../../frontEnd/pagePerfis.html"));
+  }
+);
 
 // Rota para servir a página de gestão de lojas
-router.get("/gestao_lojas", authenticateMiddleware, (req, res) => {
-  res.sendFile(path.join(__dirname, "../../frontEnd/pageLoja.html"));
-});
+router.get(
+  "/gestao_lojas",
+  authenticateMiddleware,
+  acessMiddleware(["store"]),
+  (req, res) => {
+    res.sendFile(path.join(__dirname, "../../frontEnd/pageLoja.html"));
+  }
+);
 
 // Rota para servir a página de manutenção
-router.get("/manutencao", authenticateMiddleware, (req, res) => {
-  res.sendFile(path.join(__dirname, "../../frontEnd/pagemanutencao.html"));
-});
+router.get(
+  "/manutencao",
+  authenticateMiddleware,
+  acessMiddleware(["maintenance"]),
+  (req, res) => {
+    res.sendFile(path.join(__dirname, "../../frontEnd/pagemanutencao.html"));
+  }
+);
 
 // Rota para servir a página de estoque
-router.get("/estoque", authenticateMiddleware, (req, res) => {
-  res.sendFile(path.join(__dirname, "../../frontEnd/pageestoque.html"));
-});
+router.get(
+  "/estoque",
+  authenticateMiddleware,
+  acessMiddleware(["stock"]),
+  (req, res) => {
+    res.sendFile(path.join(__dirname, "../../frontEnd/pageestoque.html"));
+  }
+);
 
 // Rota para servir a página de envio
-router.get("/gestao_envio", authenticateMiddleware, (req, res) => {
-  res.sendFile(path.join(__dirname, "../../frontEnd/pageEnvio.html"));
-});
+router.get(
+  "/gestao_envio",
+  authenticateMiddleware,
+  acessMiddleware(["send"]),
+  (req, res) => {
+    res.sendFile(path.join(__dirname, "../../frontEnd/pageEnvio.html"));
+  }
+);
 
 // Rota para servir a página de recebimento
-router.get("/gestao_recebimento", authenticateMiddleware, (req, res) => {
-  res.sendFile(path.join(__dirname, "../../frontEnd/pageRecebimento.html"));
-});
+router.get(
+  "/gestao_recebimento",
+  authenticateMiddleware,
+  acessMiddleware(["receive"]),
+  (req, res) => {
+    res.sendFile(path.join(__dirname, "../../frontEnd/pageRecebimento.html"));
+  }
+);
 
 // Rota para servir a página de gestão de relatorios
-router.get("/relatorios", authenticateMiddleware, (req, res) => {
-  res.sendFile(path.join(__dirname, "../../frontEnd/pageRelatorios.html"));
-});
+router.get(
+  "/relatorios",
+  authenticateMiddleware,
+  acessMiddleware(["reports"]),
+  (req, res) => {
+    res.sendFile(path.join(__dirname, "../../frontEnd/pageRelatorios.html"));
+  }
+);
 
 // Rota para servir a página de dashboard
-router.get("/dashboard", authenticateMiddleware, (req, res) => {
-  res.sendFile(path.join(__dirname, "../../frontEnd/pageDashboard.html"));
-});
+router.get(
+  "/dashboard",
+  authenticateMiddleware,
+  acessMiddleware(["dashboard"]),
+  (req, res) => {
+    res.sendFile(path.join(__dirname, "../../frontEnd/pageDashboard.html"));
+  }
+);
 
 module.exports = router;
