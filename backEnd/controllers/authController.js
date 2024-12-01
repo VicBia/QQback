@@ -2,7 +2,6 @@ const { generateToken } = require("../config/jwtConfig");
 const { comparePassword } = require("../utils/hashPassword");
 const User = require("../models/User");
 const Profile = require("../models/Profile");
-const UserProfile = require("../models/UserProfile");
 const cookie = require("cookie");
 
 exports.authLogin = async (req, res) => {
@@ -63,7 +62,7 @@ exports.authLogin = async (req, res) => {
     const token = generateToken({
       registration: user.registration,
       email: user.email,
-      profiles: perfisDoUsuario, // Incluindo as permissões (descrições) no token
+      profiles: perfisDoUsuario, 
     });
 
     // Salvar o token no cookie
@@ -87,7 +86,7 @@ exports.authLogin = async (req, res) => {
         registration: user.registration,
         user_name: user.user_name,
         email: user.email,
-        profiles: perfisDoUsuario, // Incluindo os perfis no retorno
+        profiles: perfisDoUsuario, 
       },
     });
   } catch (erro) {
