@@ -1,4 +1,5 @@
 const stockService = require("../services/storeService");
+const User = require("../models/User");
 
 // Rota para servir a página de gestão de lojas e consultar todas as lojas
 exports.listStore = async (req, res) => {
@@ -57,6 +58,16 @@ exports.deleteStore = async (req, res) => {
   const { id_store } = req.params;
 
   try {
+    // Verifica se há usuários associados à loja
+    const usuariosAssociados = await User.findOne({ where: { id_store } });
+
+    if (usuariosAssociados) {
+      return res.status(400).json({
+        message:
+          "A loja não pode ser excluída, pois há usuários associados a ela.",
+      });
+    }
+
     const lojaExcluida = await stockService.deletarLoja(id_store);
     if (lojaExcluida) {
       res.status(200).json({

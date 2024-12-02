@@ -25,6 +25,22 @@ async function consultarLojas() {
   }
 }
 
+// Função para consultar uma loja por ID
+async function consultarLojaPorId(id_store) {
+  try {
+    const loja = await Store.findOne({ where: { id_store: id_store } });
+
+    if (!loja) {
+      throw new Error("Loja não encontrada.");
+    }
+
+    return loja; // Retorna a loja correspondente
+  } catch (erro) {
+    console.error("Erro ao consultar a loja:", erro);
+    throw erro;
+  }
+}
+
 // Função para editar uma loja
 async function editarLoja(id_store, store_number, store_name) {
   try {
@@ -60,4 +76,10 @@ async function deletarLoja(id_store) {
   }
 }
 
-module.exports = { inserirLoja, consultarLojas, editarLoja, deletarLoja };
+module.exports = {
+  inserirLoja,
+  consultarLojas,
+  consultarLojaPorId,
+  editarLoja,
+  deletarLoja,
+};

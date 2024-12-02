@@ -1,4 +1,5 @@
 const Stock = require("../models/Stock");
+const { consultarLojaPorId } = require("./storeService");
 
 // Função para inserir um novo estoque
 async function inserirEstoque(
@@ -7,6 +8,14 @@ async function inserirEstoque(
   recommended_quantity,
   minimum_quantity
 ) {
+  const loja = await consultarLojaPorId(id_store);
+
+  if (!loja) {
+    throw new Error(
+      "Loja associada não encontrada, usuário não pode ser criado."
+    );
+  }
+
   try {
     // Inserir na tabela stock
     const novoEstoque = await Stock.create({
@@ -42,6 +51,14 @@ async function editarEstoque(
   recommended_quantity,
   minimum_quantity
 ) {
+  const loja = await consultarLojaPorId(id_store);
+
+  if (!loja) {
+    throw new Error(
+      "Loja associada não encontrada, usuário não pode ser criado."
+    );
+  }
+
   try {
     const estoqueAtualizado = await Stock.update(
       {

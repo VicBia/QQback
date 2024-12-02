@@ -2,6 +2,7 @@ const { hashPassword } = require("../utils/hashPassword");
 const User = require("../models/User");
 const UserProfile = require("../models/UserProfile");
 const sequelize = require("../config/database");
+const { consultarLojaPorId } = require("./storeService");
 
 // Função para inserir um novo usuário
 async function inserirUsuario(
@@ -11,6 +12,14 @@ async function inserirUsuario(
   user_password,
   id_store
 ) {
+  const loja = await consultarLojaPorId(id_store);
+
+  if (!loja) {
+    throw new Error(
+      "Loja associada não encontrada, usuário não pode ser criado."
+    );
+  }
+
   const registration_date = new Date();
   const passwordEncrypted = await hashPassword(user_password);
 
@@ -52,6 +61,22 @@ async function consultarUsuarios() {
   }
 }
 
+// Função para consultar um usuario por ID
+async function consultarUsuarioPorId(registration) {
+  try {
+    const user = await User.findOne({ where: { id: registration } });
+
+    if (!user) {
+      throw new Error("Usuario não encontrado.");
+    }
+
+    return user; // Retorna o usuario correspondente
+  } catch (erro) {
+    console.error("Erro ao consultar o usuario:", erro);
+    throw erro;
+  }
+}
+
 // Função para editar um usuário
 async function editarUsuario(
   registration,
@@ -60,6 +85,14 @@ async function editarUsuario(
   user_password,
   id_store
 ) {
+  const loja = await consultarLojaPorId(id_store);
+
+  if (!loja) {
+    throw new Error(
+      "Loja associada não encontrada, usuário não pode ser criado."
+    );
+  }
+
   const registration_date = new Date();
 
   try {
@@ -117,6 +150,7 @@ async function deletarUsuario(registration) {
 
 module.exports = {
   consultarUsuarios,
+  consultarUsuarioPorId,
   inserirUsuario,
   editarUsuario,
   deletarUsuario,
