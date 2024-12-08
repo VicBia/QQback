@@ -1,0 +1,28 @@
+[
+  {
+    "registration": "468579",
+    "user_name": "João Silva",
+    "email": "joao@example.com",
+    "user_password": "$2b$10$gsxIrox2U3AyhK4HjM3gHuj8wiDR38DGPxgJdn0blsJc/NcmmqxlW",
+    "id_store": 1,
+    "registration_date": "2024-11-27T18:04:45.451Z",
+    "Store": {
+      "id_store": 1,
+      "store_number": 0,
+      "store_name": "Matriz"
+    }
+  },
+  {
+    "registration": "542315",
+    "user_name": "Julio Santos",
+    "email": "julio@example.com",
+    "user_password": "$2b$10$JR9EPaxcJfJeDbJZPQUmrua31P5xHc.H5LrjtepuwON26CMTLsEq2",
+    "id_store": 1,
+    "registration_date": "2024-12-02T13:45:34.324Z",
+    "Store": {
+      "id_store": 1,
+      "store_number": 0,
+      "store_name": "Matriz"
+    }
+  }
+]

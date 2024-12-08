@@ -39,7 +39,7 @@ const modules = {
     "/manutencao": ["GET"],
   },
   reports: {
-    "/api/reports": ["GET"], // Somente GET em relatórios
+    "/api/reports": ["GET", "POST"], // Somente GET em relatórios
     "/relatorios": ["GET"],
   },
 };

@@ -10,6 +10,7 @@ const stockRoutes = require("./routes/stockRoutes");
 const talonsRoutes = require("./routes/talonsRoutes");
 const transacaoRoutes = require("./routes/transactionRoutes");
 const userprofileRoutes = require("./routes/userprofileRoutes");
+const reportRoutes = require("./routes/reportRoutes"); // Adiciona a nova rota de relatórios
 
 const authRoutes = require('./routes/authRoutes'); // Rotas de autenticação
 const protectedRoutes = require('./routes/protectedRoutes'); // Rotas protegidas
@@ -35,6 +36,7 @@ app.use('/api', protectedRoutes); // Rotas protegidas que requerem autenticaçã
 // Rotas para as páginas HTML
 app.use("/", viewRoutes);
 
+// Outras rotas da aplicação
 app.use("/", loginRoutes);
 app.use("/", admRoutes);
 app.use("/", lojaRoutes);
@@ -42,5 +44,8 @@ app.use("/", stockRoutes);
 app.use("/", talonsRoutes);
 app.use("/", transacaoRoutes);
 app.use("/", userprofileRoutes);
+
+// Nova rota para relatórios
+app.use("/", reportRoutes); // Adiciona a rota de exportação de usuários
 
 module.exports = app;
