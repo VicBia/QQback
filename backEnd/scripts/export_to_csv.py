@@ -27,10 +27,10 @@ def export_to_csv(json_file):
         # Escrever cada usuário no CSV
         for user in data:
             writer.writerow({
-                'registration': user['registration'],
-                'user_name': user['user_name'],
+                'matricula': user['registration'],
+                'nome': user['user_name'],
                 'email': user['email'],
-                'store_name': user['Store']['store_name']
+                'loja': user['Store']['store_name']
             })
 
     print(f"Dados exportados para {csv_file}")
